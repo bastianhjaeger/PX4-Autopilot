@@ -53,6 +53,7 @@ void LoggedTopics::add_default_topics()
 	add_optional_topic("autotune_attitude_control_status", 100);
 	add_topic_multi("battery_info", 5000, 3);
 	add_optional_topic("camera_capture");
+	add_optional_topic("camera_settings");
 	add_optional_topic("camera_trigger");
 	add_topic("cellular_status", 200);
 	add_topic("commander_state");
