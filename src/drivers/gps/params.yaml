@@ -183,7 +183,7 @@ parameters:
 
           Note: Currently only supported on UBX.
       type: boolean
-      default: 0
+      default: 1
       reboot_required: true
     GPS_YAW_OFFSET:
       description:

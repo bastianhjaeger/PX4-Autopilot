@@ -130,7 +130,7 @@ parameters:
         0: Deny arming
         1: Allow arming (with warning)
         2: Allow arming (no warning)
-      default: 1
+      default: 0 # APX4 custom
     COM_ARM_SWISBTN:
       description:
         short: Arm switch is a momentary button
@@ -839,3 +839,45 @@ parameters:
       max: 0.5
       decimal: 2
       increment: 0.01
+    COM_EXT_COMP_EN: # APX4 custom
+      description:
+        short: Enable external components update
+        long: |-
+          If enabled, the check will verify that the external components (e.g. ESCs, Smartbattery,...) have been successfully updated.
+          The check looks for the "ext_component_updated" file on the SD card and parses it.
+          The file can contain a "SUCCESS <return_code>" or "FAIL <error_code>", depending on the parsed result the system will
+          allow/deny arming.
+      type: enum
+      values:
+        0: Disabled
+        1: Enabled
+        2: Trigger fake success (update_checker)
+        3: Trigger fake fail (update_checker)
+      default: 0
+    COM_DLL_NAV_CTL: # APX4 custom
+      description:
+        short: Reset estimator fusion control settings on link loss
+        long: |-
+          When losing the data link connection to the vehicle, it may be desirable
+          to re-enable or disable specific estimator fusions (GNSS, AGP) such that
+          the vehicle can continue fully autonomously.
+      type: enum
+      values:
+        0: Continue as before
+        1: Use GPS Only
+        2: Use VIS Only
+        3: Use GPS & VIS
+      default: 0
+    COM_SEC_MODE_EN: # APX4 custom
+      description:
+        short: Enable secure mode
+        long: |-
+          In secure mode the vehicle will delete information relating to the GCS position after landing. It consists of:
+           * Deleting prior home position
+           * Deleting the mission
+           * Deleting land approaches
+           * Resetting local position origin
+           * Disabling the serial console
+      type: boolean
+      default: 0
+      reboot_required: true

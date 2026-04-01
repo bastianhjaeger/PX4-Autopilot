@@ -149,6 +149,10 @@ Mavlink::Mavlink() :
 
 	_event_sub.subscribe();
 	_telemetry_status_pub.advertise();
+
+	int32_t param_secure_mode = 0;
+	param_get(param_find("COM_SEC_MODE_EN"), &param_secure_mode);
+	_param_secure_mode = static_cast<bool>(param_secure_mode);
 }
 
 Mavlink::~Mavlink()
@@ -1467,7 +1471,7 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 #endif
 		configure_stream_local("ESTIMATOR_STATUS", 0.5f);
 		configure_stream_local("EXTENDED_SYS_STATE", 1.0f);
-		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 5.0f);
+		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 50.0f);
 		configure_stream_local("GIMBAL_DEVICE_SET_ATTITUDE", 5.0f);
 		configure_stream_local("GIMBAL_MANAGER_STATUS", 0.5f);
 		configure_stream_local("GLOBAL_POSITION_SENSOR", 5.0f);
@@ -1485,9 +1489,8 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("MOUNT_ORIENTATION", 10.0f);
 		configure_stream_local("NAV_CONTROLLER_OUTPUT", 1.0f);
 		configure_stream_local("OBSTACLE_DISTANCE", 1.0f);
+		configure_stream_local("OPEN_DRONE_ID_BASIC_ID", 1.f);
 		configure_stream_local("OPEN_DRONE_ID_LOCATION", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_SYSTEM", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_ARM_STATUS", 1.f);
 		configure_stream_local("ORBIT_EXECUTION_STATUS", 2.0f);
 		configure_stream_local("PING", 0.1f);
 		configure_stream_local("POSITION_TARGET_GLOBAL_INT", 1.0f);
@@ -1546,7 +1549,7 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("EFI_STATUS", 2.0f);
 		configure_stream_local("ESTIMATOR_STATUS", 1.0f);
 		configure_stream_local("EXTENDED_SYS_STATE", 5.0f);
-		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 5.0f);
+		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 50.0f);
 		configure_stream_local("GIMBAL_DEVICE_SET_ATTITUDE", 5.0f);
 		configure_stream_local("GIMBAL_MANAGER_STATUS", 0.5f);
 		configure_stream_local("GLOBAL_POSITION_INT", 50.0f);
@@ -1560,9 +1563,8 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("HOME_POSITION", 0.5f);
 		configure_stream_local("HYGROMETER_SENSOR", 1.0f);
 		configure_stream_local("NAV_CONTROLLER_OUTPUT", 10.0f);
+		configure_stream_local("OPEN_DRONE_ID_BASIC_ID", 1.f);
 		configure_stream_local("OPEN_DRONE_ID_LOCATION", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_SYSTEM", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_ARM_STATUS", 1.f);
 		configure_stream_local("OPTICAL_FLOW_RAD", 10.0f);
 		configure_stream_local("ORBIT_EXECUTION_STATUS", 5.0f);
 		configure_stream_local("PING", 1.0f);
@@ -1723,7 +1725,7 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("GPS_GLOBAL_ORIGIN", 1.0f);
 		configure_stream_local("GPS_RAW_INT", unlimited_rate);
 		configure_stream_local("GPS_STATUS", 1.0f);
-		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 5.0f);
+		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 50.0f);
 		configure_stream_local("GIMBAL_MANAGER_STATUS", 0.5f);
 		configure_stream_local("HIGHRES_IMU", 50.0f);
 		configure_stream_local("HOME_POSITION", 0.5f);
@@ -1731,9 +1733,8 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("MAG_CAL_REPORT", 1.0f);
 		configure_stream_local("MANUAL_CONTROL", 5.0f);
 		configure_stream_local("NAV_CONTROLLER_OUTPUT", 10.0f);
+		configure_stream_local("OPEN_DRONE_ID_BASIC_ID", 1.f);
 		configure_stream_local("OPEN_DRONE_ID_LOCATION", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_SYSTEM", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_ARM_STATUS", 1.f);
 		configure_stream_local("OPTICAL_FLOW_RAD", 10.0f);
 		configure_stream_local("ORBIT_EXECUTION_STATUS", 5.0f);
 		configure_stream_local("PING", 1.0f);
@@ -1803,7 +1804,7 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("DISTANCE_SENSOR", 10.0f);
 		configure_stream_local("MOUNT_ORIENTATION", 10.0f);
 		configure_stream_local("OBSTACLE_DISTANCE", 10.0f);
-		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 5.0f);
+		configure_stream_local("GIMBAL_DEVICE_ATTITUDE_STATUS", 50.0f);
 		configure_stream_local("GIMBAL_MANAGER_STATUS", 0.5f);
 		configure_stream_local("GIMBAL_DEVICE_SET_ATTITUDE", 5.0f);
 		configure_stream_local("ESC_INFO", 1.0f);
@@ -1830,9 +1831,8 @@ Mavlink::configure_streams_to_default(const char *configure_single_stream)
 		configure_stream_local("GPS_RAW_INT", unlimited_rate);
 		configure_stream_local("HOME_POSITION", 0.5f);
 		configure_stream_local("NAV_CONTROLLER_OUTPUT", 1.5f);
+		configure_stream_local("OPEN_DRONE_ID_BASIC_ID", 1.f);
 		configure_stream_local("OPEN_DRONE_ID_LOCATION", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_SYSTEM", 1.f);
-		configure_stream_local("OPEN_DRONE_ID_ARM_STATUS", 1.f);
 		configure_stream_local("OPTICAL_FLOW_RAD", 1.0f);
 		configure_stream_local("ORBIT_EXECUTION_STATUS", 5.0f);
 		configure_stream_local("PING", 0.1f);
@@ -2627,6 +2627,13 @@ void Mavlink::handleStatus()
 					events::send<int8_t>(events::ID("mavlink_iridium_enable"), events::Log::Info,
 							     "Enabling transmitting with IRIDIUM mavlink on instance {1}", _instance_id);
 				}
+			}
+
+			// APX4 custom Check secure mode
+
+			if (_param_secure_mode && vehicle_status.arming_state == vehicle_status_s::ARMING_STATE_ARMED
+			    && !_secure_mode_active) {
+				_secure_mode_active = true;
 			}
 		}
 	}

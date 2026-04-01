@@ -111,7 +111,20 @@ parameters:
           a warning is triggered and, if MAV_X_RADIO_CTL is enabled, the software-flow
           control is reset.
       type: int32
-      default: 5
+      default: 25 # APX4 custom
       unit: s
       min: 1
       max: 250
+    MAV_PARAM_LOCK: # APX4 custom
+      description:
+        short: Limit parameter access via MAVLink
+        long: |-
+          Controls if parameters are locked out from being set via MAVLink, except for a hardcoded whitelist.
+      type: enum
+      values:
+        0: Whitelist in restricted, full otherwise
+        1: Only whitelist
+        2: Full access
+      default: 0
+      min: 0
+      max: 2
