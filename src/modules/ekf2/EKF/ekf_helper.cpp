@@ -823,7 +823,8 @@ void Ekf::updateHorizontalDeadReckoningstatus()
 	}
 
 	// position aiding active
-	if ((_control_status.flags.gnss_pos || _control_status.flags.ev_pos || _control_status.flags.aux_gpos)
+	if ((_control_status.flags.gnss_pos || _control_status.flags.ev_pos
+	     || _control_status.flags.aux_gpos || _control_status.flags.rngbcn_fusion)
 	    && isRecent(_time_last_hor_pos_fuse, _params.no_aid_timeout_max)
 	   ) {
 		inertial_dead_reckoning = false;
@@ -838,7 +839,7 @@ void Ekf::updateHorizontalDeadReckoningstatus()
 		inertial_dead_reckoning = false;
 
 	} else {
-		if (!_control_status.flags.in_air && (_params.ekf2_of_ctrl == 1)
+		if (!_control_status.flags.in_air && _fc.of.intended()
 		    && isRecent(_aid_src_optical_flow.timestamp_sample, _params.no_aid_timeout_max)
 		   ) {
 			// currently landed, but optical flow aiding should be possible once in air
@@ -865,7 +866,7 @@ void Ekf::updateHorizontalDeadReckoningstatus()
 
 		if (!_control_status.flags.in_air && _control_status.flags.fixed_wing
 		    && (_params.ekf2_fuse_beta == 1)
-		    && (_params.ekf2_arsp_thr > 0.f) && isRecent(_aid_src_airspeed.timestamp_sample, _params.no_aid_timeout_max)
+		    && _fc.aspd.intended() && isRecent(_aid_src_airspeed.timestamp_sample, _params.no_aid_timeout_max)
 		   ) {
 			// currently landed, but air data aiding should be possible once in air
 			aiding_expected_in_air = true;
