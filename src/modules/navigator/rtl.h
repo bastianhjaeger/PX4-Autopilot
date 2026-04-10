@@ -90,6 +90,8 @@ public:
 
 	bool isLanding();
 
+	bool clearSafePoints(); // APX4 custom
+
 private:
 	enum class DestinationType {
 		DESTINATION_TYPE_HOME,
