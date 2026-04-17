@@ -1,0 +1,43 @@
+#!/bin/sh
+# @name Boat (Ackermann style)
+# @type Boat
+# @class Boat
+
+. ${R}etc/init.d/rc.boat_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=sihsim}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=boat}
+
+# set SYS_HITL to 2 to start the SIH and avoid sensors startup
+param set SYS_HITL 2
+param set-default SIH_VEHICLE_TYPE 6 	# sih as boat
+
+# Inertia and mass properties
+param set-default SIH_MASS 2000
+param set-default SIH_IXX 50
+param set-default SIH_IYY 50
+param set-default SIH_IZZ 6000
+
+param set-default SIH_T_MAX 50000 # Maximum thrust in Newtons
+
+# Drag parameters
+param set-default SIH_KDV 1500
+param set-default SIH_KDW 100000
+param set-default SIH_LAT_DRAG 6000
+
+param set-default PWM_MAIN_FUNC1 101 # Throttle
+
+param set-default SENS_EN_GPSSIM 1 # Enable GPS simulator
+param set-default SENS_EN_BAROSIM 1 # Enable Barometer simulator
+param set-default SENS_EN_MAGSIM 1 # Enable Magnetometer simulator
+
+param set-default NAV_ACC_RAD 0.5
+
+# Pure Pursuit parameters
+param set-default PP_LOOKAHD_GAIN 1
+param set-default PP_LOOKAHD_MAX 30
+param set-default PP_LOOKAHD_MIN 10
+
+# Navigation params
+param set-default NAV_ACC_RAD 30.00
+param set-default NAV_LOITER_RAD 30.00

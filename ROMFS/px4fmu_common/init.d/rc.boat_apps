@@ -1,0 +1,12 @@
+#!/bin/sh
+# Standard apps for a boat.
+
+# Start the attitude and position estimator.
+ekf2 start &
+
+# Start boat controller.
+boat start
+
+# Start Land Detector.
+# @TODO: implement a boat specific land detector and start it here instead of the rover one.
+land_detector start rover

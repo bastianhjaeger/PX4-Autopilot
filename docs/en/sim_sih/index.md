@@ -33,6 +33,7 @@ The following vehicle types are supported:
 | Tailsitter VTOL <Badge type="tip" text="PX4 v1.13" />           | `make px4_sitl_sih sihsim_xvert`         | Experimental |
 | Standard VTOL (QuadPlane) <Badge type="tip" text="PX4 v1.16" /> | `make px4_sitl_sih sihsim_standard_vtol` | Experimental |
 | Ackermann Rover <Badge type="tip" text="PX4 v1.16" />           | `make px4_sitl_sih sihsim_rover`         | Experimental |
+| Boat                                                            | `make px4_sitl_boat sihsim_boat`         | Experimental |
 
 ::: warning
 Only the quadrotor vehicle type is stable and recommended for development. All other vehicle types (hexarotor, fixed-wing, VTOL, rover) are experimental and may have aerodynamic model or controller interaction issues that produce unrealistic flight behavior.

@@ -1,0 +1,5 @@
+menuconfig MODULES_BOAT
+	bool "boat"
+	default n
+	---help---
+		Enable support for boats

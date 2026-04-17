@@ -167,6 +167,18 @@ parameters:
       min: 0.0
       decimal: 3
       increment: 0.005
+    SIH_LAT_DRAG:
+      description:
+        short: Lateral drag coefficient for boats
+        long: |-
+          Physical coefficient representing the friction with water particules during lateral movements of boats.
+          The greater this value, the slower the boat will move laterally.
+
+          Lateral drag force function of velocity: D=-LAT_DRAG*V.
+          This value can be set to 0 for non boat vehicles, or if unknown.
+      type: float
+      default: 500.0
+      unit: N/(m/s)
     SIH_LOC_LAT0:
       description:
         short: Initial geodetic latitude
@@ -257,6 +269,7 @@ parameters:
         3: Standard VTOL
         4: Hexacopter
         5: Rover Ackermann
+        6: Boat
       default: 0
       reboot_required: true
     SIH_WIND_N:

@@ -297,6 +297,29 @@ void Sih::read_motors(const float dt)
 {
 	actuator_outputs_s actuators_out;
 
+	// Special case for boat, which has separate topics for steering setpoints. For other vehicles, read the actuator_outputs topic as usual.
+	if ((_vehicle == VehicleType::Boat)) {
+		// for boat, read the throttle and rudder setpoints separately
+
+		if (_actuator_out_sub.update(&actuators_out)) {
+			_last_actuator_output_time = actuators_out.timestamp;
+
+			_u[0] = actuators_out.output[0];
+			_u[1] = actuators_out.output[1];
+
+		}
+
+		actuator_angle_setpoints_s _steering_angle_setpoint{};
+
+		if (_steering_angle_sub.update(&_steering_angle_setpoint)) {
+			_steeringAngle[0] = _steering_angle_setpoint.angle_setpoint[0];
+			_steeringAngle[1] = _steering_angle_setpoint.angle_setpoint[1];
+		}
+
+		return;
+	}
+
+
 	if (_actuator_out_sub.update(&actuators_out)) {
 		_last_actuator_output_time = actuators_out.timestamp;
 
@@ -366,7 +389,45 @@ void Sih::generate_force_and_torques(const float dt)
 
 	} else if (_vehicle == VehicleType::RoverAckermann) {
 		generate_rover_ackermann_dynamics(_u[1], _u[0], dt);
+
+	} else if (_vehicle == VehicleType::Boat) {
+		generate_boat_dynamics();
 	}
+}
+
+void Sih::generate_boat_dynamics()
+{
+
+	const float MAX_FORCE = _T_MAX; // [N]
+	const float ENGINE_X_POS = -3.0f; // Engine X position in body frame [m]
+	const float ENGINE_Y_POS = 0.0f; // Engine Y position in body frame [m]
+
+	// Convert nav velocity to body frame
+	const matrix::Dcmf R_nb(_q); // body to nav frame
+	const matrix::Vector3f v_B = R_nb.T() * _v_N; // nav -> body
+
+	// Compute input-based thrust
+	const float steering_angle = math::radians(_steeringAngle[0]);
+	const float force = MAX_FORCE * _u[0];
+
+	_T_B = matrix::Vector3f(
+		       std::cos(-steering_angle) * force,
+		       std::sin(-steering_angle) * force,
+		       0.0f
+	       );
+
+	_Mt_B = matrix::Vector3f(
+			0.0f,
+			0.0f,
+			(std::sin(-steering_angle) * ENGINE_X_POS - std::cos(-steering_angle) * ENGINE_Y_POS) * force
+		);
+
+	// Apply drag damping
+	_T_B(0) -= _KDV * v_B(0); // forward resistance
+	_T_B(1) -= _param_sih_lat_drag.get() * v_B(1); // lateral resistance
+
+	// Angular damping (if you have _w_B)
+	_Mt_B(2) -= _KDW * _w_B(2); // oppose yaw rotation
 }
 
 void Sih::generate_fw_aerodynamics(const float roll_cmd, const float pitch_cmd, const float yaw_cmd,
@@ -526,7 +587,8 @@ void Sih::equations_of_motion(const float dt)
 			_grounded = true;
 
 		} else if (_vehicle == VehicleType::FixedWing
-			   || _vehicle == VehicleType::RoverAckermann) {
+			   || _vehicle == VehicleType::RoverAckermann
+			   || _vehicle == VehicleType::Boat) {
 			Vector3f down_u = _R_N2E.col(2);
 			ground_force_E = -down_u * sum_of_forces_E * down_u;
 
@@ -854,6 +916,12 @@ int Sih::print_status()
 
 	} else if (_vehicle == VehicleType::RoverAckermann) {
 		PX4_INFO("Rover Ackermann");
+
+	} else if (_vehicle == VehicleType::Boat) {
+		PX4_INFO("Boat");
+		PX4_INFO("steering angles (deg)");
+		Vector<float, 2> steering = Vector<float, 2>(_steeringAngle);
+		steering.transpose().print();
 	}
 
 	PX4_INFO("vehicle landed: %d", _grounded);

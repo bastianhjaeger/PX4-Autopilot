@@ -1,0 +1,16 @@
+module_name: Boat
+
+parameters:
+  - group: Boat
+    definitions:
+      BO_STEER_MAX:
+        description:
+          short: Maximum steering angle rudder
+          long: The maximum angle the rudder(s) can be deflected. Symmetric.
+        type: float
+        unit: deg
+        min: 0
+        max: 180
+        increment: 0.1
+        decimal: 1
+        default: 30

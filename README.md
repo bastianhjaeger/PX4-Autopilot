@@ -117,7 +117,7 @@ The "Diff summary" string should be placed in a comment in the code, e.g.
 
 ```// APX4 flavor: vtol_defaults: MIS_TKO_LAND_REQ default to 5```
 
-Note: as we squash the history on every relese the comments have to be in code, not in the commits.
+Note: as we squash the history on every release the comments have to be in code, not in the commits.
 
 ### CI/Workflows
 | Diff summary | Description | Reason | Comments |
@@ -243,3 +243,4 @@ Board support
 | Additional topics for uXRCE-DDS client | Adds /fmu/out/vehicle_acceleration, /fmu/out/vehicle_thrust_setpoint and /fmu/out/hover_thrust_estimate | Required by mc-follow and fw-landing | |
 | Secure mode | Option to clear land approaches, missions and home position when landed to prevent getting GCS/start location on a landed vehicle. Also disables serial console.|  ||
 | MAVLink parameters: add parameter to control access to params in prod | MAV_PARAM_LOCK |  | https://github.com/Auterion/PX4_firmware_private/pull/3041 |
+| Boat: boat module | Module to control and Allocate boats in a single or dual engine setup | Contractually aggreed with Kraken that they will have exclusivity over this software over a limited amount of time | |

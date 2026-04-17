@@ -38,6 +38,7 @@ include(px4_list_make_absolute)
 
 set(msg_files
 	ActionRequest.msg
+	ActuatorAngleSetpoints.msg
 	ActuatorArmed.msg
 	ActuatorControlsStatus.msg
 	ActuatorOutputs.msg
