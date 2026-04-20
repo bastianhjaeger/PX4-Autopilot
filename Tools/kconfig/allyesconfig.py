@@ -65,7 +65,6 @@ exception_list_sitl = [
     'DRIVERS_PWM_OUT', # No Posix driver, I think this only works on NuttX
     'COMMON', # Fails I2C dependencies
     'DRIVERS', # Fails I2C dependencies
-    'SYSTEMCMDS_REBOOT', # Sitl can't reboot
     'MODULES_BATTERY_STATUS', # Sitl doesn't provide a power brick
     'SYSTEMCMDS_SERIAL_PASSTHRU', # Not supported in SITL
     'SYSTEMCMDS_SERIAL_TEST', # Not supported in SITL
